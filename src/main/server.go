@@ -25,6 +25,7 @@ func main() {
 		defer r.Body.Close()
 
 		// game.AddPlayer(data.name)
+		gameChannel <-game
 		json.NewEncoder(w).Encode(data)
 		fmt.Println(data.name)
 	}).Methods("PUT");
