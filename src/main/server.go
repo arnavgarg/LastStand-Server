@@ -1,38 +1,42 @@
 package main
 
 import (
+	"net/http"
+	"log"
 	"fmt"
-	"os"
-	"net"
-	"io"
-	"time"
+
+	"github.com/gorilla/mux"
+	"encoding/json"
 )
 
 func main() {
-	ln, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		fmt.Println("[  ERROR  ] Failed to Listen on Port 8080\n" + err.Error())
-		os.Exit(3)
-	}
-	defer ln.Close()
-	go startGame()
+	gameChannel := make(chan Game)
 
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			fmt.Println("[  ERROR  ] Failed to Accept Incoming Connections\n" + err.Error())
+	router := mux.NewRouter()
+	router.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
+		game := <-gameChannel
+		decoder := json.NewDecoder(r.Body)
+
+		var data AddPlayerData
+		err := decoder.Decode(&data)
+		if (err != nil) {
+			panic(err)
 		}
-		fmt.Println("[ SUCCESS ] Connection from " + conn.RemoteAddr().String())
-		io.WriteString(conn, fmt.Sprint("[ SUCCESS ] Connection established at ", time.Now() , "\n"))
+		defer r.Body.Close()
 
-		go handleConnection(conn)
+		// game.AddPlayer(data.name)
+		json.NewEncoder(w).Encode(data)
+		fmt.Println(data.name)
+	}).Methods("PUT");
+
+	log.Fatal(http.ListenAndServe(":8080", router))
+
+	go startGame(gameChannel)
+}
+
+func startGame(gameChannel chan Game) {
+	gameChannel <- Game {
+
 	}
 }
 
-func handleConnection(conn net.Conn) {
-	defer conn.Close()
-}
-
-func startGame() {
-
-}
