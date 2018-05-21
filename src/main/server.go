@@ -16,10 +16,11 @@ func main() {
 	router.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
 		game := <-gameChannel
 		decoder := json.NewDecoder(r.Body)
+		fmt.Println("Connection from ", r.RemoteAddr)
 
 		var data AddPlayerData
 		err := decoder.Decode(&data)
-		if (err != nil) {
+		if err != nil {
 			panic(err)
 		}
 		defer r.Body.Close()
