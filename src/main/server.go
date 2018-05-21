@@ -13,7 +13,7 @@ func main() {
 	gameChannel := make(chan Game)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		game := <-gameChannel
 		decoder := json.NewDecoder(r.Body)
 		fmt.Println("Connection from ", r.RemoteAddr)
