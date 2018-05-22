@@ -3,18 +3,17 @@ package main
 import (
 	"net/http"
 	"log"
-	"fmt"
-
 	"github.com/gorilla/mux"
 	"encoding/json"
+	"fmt"
 )
 
 var game Game
 
 func main() {
 	router := mux.NewRouter()
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("[ SUCCESS ] Request from ", r.RemoteAddr)
 		decoder := json.NewDecoder(r.Body)
 		var data AddPlayerData
 		err := decoder.Decode(&data)
@@ -23,9 +22,8 @@ func main() {
 		}
 		defer r.Body.Close()
 
-		// game.AddPlayer(data.name)
-
-		json.NewEncoder(w).Encode(data)
+		json.NewEncoder(w).Encode(game.AddPlayer(data.Name))
+		fmt.Println("[ SUCCESS ] New Player Joined from ", r.RemoteAddr)
 	}).Methods("PUT");
 
 	log.Fatal(http.ListenAndServe(":8080", router))
