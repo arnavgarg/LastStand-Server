@@ -9,15 +9,13 @@ import (
 	"encoding/json"
 )
 
-func main() {
-	gameChannel := make(chan Game)
+var game Game
 
+func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		game := <-gameChannel
+		fmt.Println("[ SUCCESS ] Request from ", r.RemoteAddr)
 		decoder := json.NewDecoder(r.Body)
-		fmt.Println("Connection from ", r.RemoteAddr)
-
 		var data AddPlayerData
 		err := decoder.Decode(&data)
 		if err != nil {
@@ -26,19 +24,16 @@ func main() {
 		defer r.Body.Close()
 
 		// game.AddPlayer(data.name)
-		gameChannel <-game
+
 		json.NewEncoder(w).Encode(data)
-		fmt.Println(data.name)
 	}).Methods("PUT");
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 
-	go startGame(gameChannel)
+	go startGame()
 }
 
-func startGame(gameChannel chan Game) {
-	gameChannel <- Game {
+func startGame() {
 
-	}
 }
 

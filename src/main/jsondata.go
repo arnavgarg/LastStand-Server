@@ -1,5 +1,5 @@
 package main
 
 type AddPlayerData struct {
-	name string
+	Name string `json:"name"`
 }

@@ -1,7 +1,7 @@
 package main
 
 type Game struct {
-    clients     []Client
+    Players     []Player
 }
 
 func (g Game) AddPlayer() int {
