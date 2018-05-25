@@ -14,24 +14,40 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		decoder := json.NewDecoder(r.Body)
 		var data AddPlayerData
-		err := decoder.Decode(&data)
+		err := json.NewDecoder(r.Body).Decode(&data)
 		if err != nil {
 			panic(err)
 		}
 		defer r.Body.Close()
 
-		json.NewEncoder(w).Encode(getAddPlayerResponse(game.AddPlayer(data.Name)))
+		json.NewEncoder(w).Encode(game.AddPlayer(data.Name))
 		fmt.Println("[ SUCCESS ] New Player Joined from ", r.RemoteAddr)
 	}).Methods("PUT");
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var data ChangeData
+		err := json.NewDecoder(r.Body).Decode(&data)
+		if (err != nil) {
+			panic(nil)
+		}
+		defer r.Body.Close()
 
-	go startGame()
+		fmt.Println(len(data.Log))
+
+		json.NewEncoder(w).Encode(game.GetGameData())
+		game.ApplyChanges(data)
+	}).Methods("GET")
+
+	startGame()
+
+	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Println("[ SUCCESS ] Listening on Port 8080")
 }
 
 func startGame() {
-
+	game = Game {
+		make([]Player, 0),
+	}
 }
 
