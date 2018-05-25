@@ -33,10 +33,9 @@ func main() {
 		}
 		defer r.Body.Close()
 
-		fmt.Println(len(data.Log))
-
-		json.NewEncoder(w).Encode(game.GetGameData())
 		game.ApplyChanges(data)
+		fmt.Println("[ SUCCESS ] Changes Applied from ", r.RemoteAddr)
+		json.NewEncoder(w).Encode(game.GetGameData())
 	}).Methods("GET")
 
 	startGame()
