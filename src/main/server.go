@@ -1,38 +1,52 @@
 package main
 
 import (
+	"net/http"
+	"log"
+	"github.com/gorilla/mux"
+	"encoding/json"
 	"fmt"
-	"os"
-	"net"
-	"io"
-	"time"
 )
 
+var game Game
+
 func main() {
-	ln, err := net.Listen("tcp", ":8080")
-	if err != nil {
-		fmt.Println("[  ERROR  ] Failed to Listen on Port 8080\n" + err.Error())
-		os.Exit(3)
-	}
-	defer ln.Close()
-	go startGame()
+	router := mux.NewRouter()
 
-	for {
-		conn, err := ln.Accept()
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var data AddPlayerData
+		err := json.NewDecoder(r.Body).Decode(&data)
 		if err != nil {
-			fmt.Println("[  ERROR  ] Failed to Accept Incoming Connections\n" + err.Error())
+			panic(err)
 		}
-		fmt.Println("[ SUCCESS ] Connection from " + conn.RemoteAddr().String())
-		io.WriteString(conn, fmt.Sprint("[ SUCCESS ] Connection established at ", time.Now() , "\n"))
+		defer r.Body.Close()
 
-		go handleConnection(conn)
-	}
-}
+		json.NewEncoder(w).Encode(game.AddPlayer(data.Name))
+		fmt.Println("[ SUCCESS ] New Player Joined from ", r.RemoteAddr)
+	}).Methods("PUT");
 
-func handleConnection(conn net.Conn) {
-	defer conn.Close()
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var data ChangeData
+		err := json.NewDecoder(r.Body).Decode(&data)
+		if (err != nil) {
+			panic(nil)
+		}
+		defer r.Body.Close()
+
+		game.ApplyChanges(data)
+		fmt.Println("[ SUCCESS ] Changes Applied from ", r.RemoteAddr)
+		json.NewEncoder(w).Encode(game.GetGameData())
+	}).Methods("GET")
+
+	startGame()
+
+	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Println("[ SUCCESS ] Listening on Port 8080")
 }
 
 func startGame() {
-
+	game = Game {
+		make([]Player, 0),
+	}
 }
+
