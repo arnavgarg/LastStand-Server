@@ -21,7 +21,10 @@ func main() {
 		}
 		defer r.Body.Close()
 
-		json.NewEncoder(w).Encode(game.AddPlayer(data.Name))
+		json.NewEncoder(w).Encode(AddPlayerResponse {
+			game.AddPlayer(data.Name),
+			game.Rocks,
+		})
 		fmt.Println("[ SUCCESS ] New Player Joined from ", r.RemoteAddr)
 	}).Methods("PUT");
 
@@ -47,6 +50,7 @@ func main() {
 func startGame() {
 	game = Game {
 		make([]Player, 0),
+		generateRocks(),
 	}
 }
 

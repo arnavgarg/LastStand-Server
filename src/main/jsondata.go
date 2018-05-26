@@ -4,6 +4,11 @@ type AddPlayerData struct {
 	Name 	string `json:"name"`
 }
 
+type AddPlayerResponse struct {
+	Player	Player `json:"player"`
+	Rocks	[]Rock `json:"rocks"`
+}
+
 type ChangeData struct {
 	Player	int `json:"player"`
 	Log		[]Entry `json:"log"`
@@ -20,4 +25,5 @@ type Extra struct {
 
 type GameData struct {
 	Players	[]Player `json:"players"`
+	Rocks	[]Rock `json:"rocks"`
 }

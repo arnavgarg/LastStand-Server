@@ -6,14 +6,15 @@ import (
 
 type Game struct {
     Players     []Player
+    Rocks       []Rock
 }
 
 func (g *Game) AddPlayer(name string) Player {
     player := Player {
         len(g.Players),
         name,
-        rand.Float64() * 4000,
-        rand.Float64() * 4000,
+        rand.Float64() * 3000 + 500,
+        rand.Float64() * 4000 + 500,
     }
     g.Players = append(g.Players, player)
     return player
@@ -37,6 +38,7 @@ func (g *Game) ApplyChanges(changes ChangeData) {
 func (g *Game) GetGameData() GameData {
     return GameData {
         g.Players,
+        g.Rocks,
     }
 }
 
