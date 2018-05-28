@@ -16,14 +16,9 @@ type ChangeData struct {
 
 type Entry struct {
 	Id		int `json:"id"`
-	Extras	[]Extra `json:"extras"`
-}
-
-type Extra struct {
-	Value	string `json:"value"`
+	Extras	[]string `json:"extras"`
 }
 
 type GameData struct {
 	Players	[]Player `json:"players"`
-	Rocks	[]Rock `json:"rocks"`
 }

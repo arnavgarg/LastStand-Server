@@ -38,7 +38,6 @@ func (g *Game) ApplyChanges(changes ChangeData) {
 func (g *Game) GetGameData() GameData {
     return GameData {
         g.Players,
-        g.Rocks,
     }
 }
 

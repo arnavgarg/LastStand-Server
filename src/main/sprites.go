@@ -26,8 +26,8 @@ func (p *Player) moveDown() {
 }
 
 type Rock struct {
-	X		float64 `json:x`
-	Y		float64 `json:y`
+	X		float64 `json:"x"`
+	Y		float64 `json:"y"`
 }
 
 func generateRocks() []Rock {
