@@ -28,7 +28,7 @@ func main() {
 		fmt.Println("[ SUCCESS ] New Player Joined from ", r.RemoteAddr)
 	}).Methods("PUT");
 
-	router.HandleFunc("/player", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var data ChangeData
 		err := json.NewDecoder(r.Body).Decode(&data)
 		if (err != nil) {
@@ -37,9 +37,9 @@ func main() {
 		defer r.Body.Close()
 
 		game.ApplyChanges(data)
-		json.NewEncoder(w).Encode(game.GetGameData())
 		fmt.Println("[ SUCCESS ] Changes Applied from ", r.RemoteAddr)
-	}).Methods("PUT")
+		json.NewEncoder(w).Encode(game.GetGameData())
+	}).Methods("POST")
 
 	startGame()
 
