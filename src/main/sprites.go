@@ -7,22 +7,31 @@ type Player struct {
 	Name    string `json:"name"`
 	X       float64 `json:"x"`
 	Y       float64 `json:"y"`
+	Health	int `json:"health"`
 }
 
 func (p *Player) moveRight() {
-	p.X += 2;
+	if p.X < 3950 {
+		p.X += 2;
+	}
 }
 
 func (p *Player) moveLeft() {
-	p.X -= 2;
+	if p.X > 50 {
+		p.X -= 2;
+	}
 }
 
 func (p *Player) moveUp() {
-	p.Y -= 2;
+	if p.Y > 50 {
+		p.Y -= 2;
+	}
 }
 
 func (p *Player) moveDown() {
-	p.Y += 2;
+	if p.Y < 3950 {
+		p.Y += 2;
+	}
 }
 
 type Rock struct {
@@ -31,11 +40,11 @@ type Rock struct {
 }
 
 func generateRocks() []Rock {
-	rocks := make([]Rock, 1000)
+	rocks := make([]Rock, 250)
 	for i := 0; i < len(rocks); i++ {
 		rocks[i] = Rock {
-			rand.Float64() * 3980 + 10,
-			rand.Float64() * 3980 + 10,
+			rand.Float64() * 3950 + 25,
+			rand.Float64() * 3950 + 25,
 		}
 	}
 	return rocks
