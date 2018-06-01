@@ -6,7 +6,7 @@ import (
 )
 
 type Player struct {
-	Id		int `json:"id"`
+	Id	int `json:"id"`
 	Name    string `json:"name"`
 	X       float64 `json:"x"`
 	Y       float64 `json:"y"`
@@ -44,7 +44,7 @@ func (p *Player) moveDown() {
 }
 
 func (p *Player) collisionRock(r Rock) bool {
-	return math.Sqrt(math.Pow(p.X - r.X, 2) + math.Pow(p.Y - r.Y, 2)) <= 90
+	return math.Sqrt(math.Pow(p.X - r.X, 2) + math.Pow(p.Y - r.Y, 2)) <= 50
 }
 
 type Rock struct {
