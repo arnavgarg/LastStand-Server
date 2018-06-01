@@ -45,13 +45,12 @@ func (g *Game) ApplyChanges(changes ChangeData) {
     }
 }
 
-func (g *Game) CheckCollisions(p *Player) bool {
+func (g *Game) CheckCollisions(p *Player) {
     for _,r := range g.Rocks {
         if p.collisionRock(r) {
-            return false
+            p.Status = 0;
         }
     }
-    return true
 }
 
 func (g *Game) Shoot(player Player, angle float64) {

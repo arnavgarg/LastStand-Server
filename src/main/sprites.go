@@ -3,7 +3,6 @@ package main
 import (
 	"math/rand"
 	"math"
-	"fmt"
 )
 
 type Player struct {
@@ -17,30 +16,31 @@ type Player struct {
 }
 
 func (p *Player) moveRight() {
-	if p.X < 3950 && game.CheckCollisions(p) {
+	if p.X < 3950 {
 		p.X += 5;
 	}
+	game.CheckCollisions(p)
 }
 
 func (p *Player) moveLeft() {
-	if p.X > 50 && game.CheckCollisions(p) {
+	if p.X > 50 {
 		p.X -= 5;
-		fmt.Println("move")
 	}
+	game.CheckCollisions(p)
 }
 
 func (p *Player) moveUp() {
-	if p.Y > 50 && game.CheckCollisions(p) {
+	if p.Y > 50 {
 		p.Y -= 5;
-		fmt.Println("move")
 	}
+	game.CheckCollisions(p)
 }
 
 func (p *Player) moveDown() {
-	if p.Y < 3950 && game.CheckCollisions(p) {
+	if p.Y < 3950 {
 		p.Y += 5;
-		fmt.Println("move")
 	}
+	game.CheckCollisions(p)
 }
 
 func (p *Player) collisionRock(r Rock) bool {
