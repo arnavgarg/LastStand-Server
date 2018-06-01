@@ -37,7 +37,6 @@ func main() {
 		defer r.Body.Close()
 
 		game.ApplyChanges(data)
-		fmt.Println("[ SUCCESS ] Changes Applied from ", r.RemoteAddr)
 		json.NewEncoder(w).Encode(game.GetGameData())
 	}).Methods("POST")
 
